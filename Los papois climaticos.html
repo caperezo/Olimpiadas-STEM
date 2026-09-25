@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Los papois · Calidad del Aire · Olimpiadas STEM Bogotá</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+*{box-sizing:border-box}
+body{margin:0;padding:24px 14px 50px;min-height:100vh;
+  font-family:'Press Start 2P','Courier New',monospace;font-size:12px;line-height:1.8;
+  background:#0a0e27;color:#e8ffe8;
+  background-image:radial-gradient(circle at 20% 10%,rgba(57,255,20,.12),transparent 45%),
+                   radial-gradient(circle at 85% 80%,rgba(0,255,255,.10),transparent 50%),
+                   linear-gradient(#0a0e27,#050818)}
+.app{max-width:980px;margin:0 auto}
+.hero{text-align:center;margin-bottom:26px;border:3px solid #39ff14;border-radius:8px;
+  padding:22px;background:rgba(10,14,39,.7);
+  box-shadow:0 0 24px rgba(57,255,20,.35),inset 0 0 24px rgba(57,255,20,.08)}
+.hero h1{margin:0 0 10px;font-size:clamp(.9rem,2.4vw,1.3rem);color:#39ff14;
+  text-shadow:0 0 8px #39ff14;letter-spacing:1px}
+.hero .sub{color:#00ffff;text-shadow:0 0 6px #00ffff;font-size:.75rem}
+.hero .tag{display:inline-block;margin-top:12px;padding:6px 14px;border:2px solid #00ffff;
+  color:#00ffff;font-size:.6rem;background:rgba(0,255,255,.08)}
+.card{background:rgba(5,10,35,.85);border:2px solid #39ff14;border-radius:6px;
+  padding:18px 20px;margin-bottom:18px;box-shadow:0 0 16px rgba(57,255,20,.22)}
+h2{font-size:.78rem;margin:0 0 14px;color:#39ff14;letter-spacing:1px}
+label{display:block;color:#00ffff;margin-bottom:10px;font-size:.7rem}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:28px;
+  background:transparent;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:10px;background:#0a0e27;
+  border:2px solid #39ff14}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;
+  background:#39ff14;border:2px solid #00ffff;margin-top:-8px;box-shadow:0 0 12px #39ff14}
+input[type=range]::-moz-range-track{height:10px;background:#0a0e27;border:2px solid #39ff14}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;background:#39ff14;
+  border:2px solid #00ffff;box-shadow:0 0 12px #39ff14;border-radius:0}
+.valor-x{display:inline-block;background:#000;border:2px solid #00ffff;padding:8px 14px;
+  color:#00ffff;font-size:.78rem;margin-top:8px;text-shadow:0 0 6px #00ffff}
+.presets{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.presets button{font-family:inherit;font-size:.58rem;padding:9px 12px;background:transparent;
+  border:2px solid #00ffff;color:#00ffff;cursor:pointer;letter-spacing:1px;transition:.15s}
+.presets button:hover{background:#00ffff;color:#0a0e27;box-shadow:0 0 12px #00ffff}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.kpi{padding:16px;border:2px solid #39ff14;background:rgba(0,0,0,.4)}
+.kpi.alt{border-color:#00ffff}
+.kpi-label{font-size:.58rem;color:#00ffff;letter-spacing:1px;margin:0 0 10px}
+.kpi-val{font-size:1.5rem;color:#39ff14;margin:0;text-shadow:0 0 10px #39ff14}
+.kpi.alt .kpi-val{color:#00ffff;text-shadow:0 0 10px #00ffff;font-size:.85rem}
+.kpi-sub{font-size:.58rem;color:#7fa87f;margin:8px 0 0}
+canvas{width:100%;height:320px;display:block;background:#000;border:2px solid #39ff14;border-radius:4px}
+.leyenda{display:flex;gap:18px;flex-wrap:wrap;font-size:.62rem;margin-top:14px;color:#7fa87f}
+.dot{display:inline-block;width:14px;height:14px;background:#39ff14;margin-right:6px;
+  vertical-align:-3px;box-shadow:0 0 8px #39ff14}
+.formula{background:#000;border:2px dashed #00ffff;padding:14px 16px;color:#00ffff;
+  font-size:.7rem;margin:0;overflow-x:auto;line-height:2.2}
+footer{text-align:center;font-size:.58rem;color:#5a6b8a;margin-top:24px;letter-spacing:1px}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="hero">
+    <h1>◄ LOS PAPOIS ►</h1>
+    <div class="sub">CALIDAD DEL AIRE</div>
+    <span class="tag">OLIMPIADAS STEM BOGOTÁ · PREJUVENIL</span>
+  </header>
+
+  <section class="card">
+    <h2>► ENTRADA (X) ◄</h2>
+    <label>Tiempo transcurrido (horas)</label>
+    <input type="range" id="x" min="0" max="24" step="1" value="12">
+    <div class="valor-x">X = <span id="xVal">12</span> h</div>
+    <div class="presets">
+      <button data-v="0">00 h</button><button data-v="6">06 h</button>
+      <button data-v="12">12 h</button><button data-v="18">18 h</button>
+      <button data-v="24">24 h</button>
+    </div>
+  </section>
+
+  <section class="grid">
+    <div class="card kpi">
+      <p class="kpi-label">NIVEL CALIDAD AIRE</p>
+      <p class="kpi-val" id="yVal">49.77</p>
+      <p class="kpi-sub">índice predicho</p>
+    </div>
+    <div class="card kpi alt">
+      <p class="kpi-label">ECUACIÓN</p>
+      <p class="kpi-val">y = 2.0944x + 24.636</p>
+      <p class="kpi-sub">R² = 0.2021</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>► GRÁFICO DE TENDENCIA ◄</h2>
+    <canvas id="cv"></canvas>
+    <div class="leyenda">
+      <span><span class="dot"></span>Calidad del aire</span>
+      <span><span class="dot" style="background:#00ffff;box-shadow:0 0 8px #00ffff"></span>Punto actual</span>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>► MODELO MATEMÁTICO ◄</h2>
+    <p class="formula">y = 2.0944 · x + 24.636</p>
+  </section>
+
+  <footer>© LOS PAPOIS · CALIDAD DEL AIRE · OLIMPIADAS STEM BOGOTÁ</footer>
+</div>
+
+<script>
+(function(){
+  const A=2.0944,B=24.636;
+  const sl=document.getElementById('x'),xv=document.getElementById('xVal'),
+        yv=document.getElementById('yVal'),cv=document.getElementById('cv');
+  const f=x=>A*x+B;
+  const nf=new Intl.NumberFormat('es-CO',{minimumFractionDigits:2,maximumFractionDigits:2});
+
+  function draw(cur){
+    const ctx=cv.getContext('2d'),r=cv.getBoundingClientRect();
+    const W=r.width||600,H=r.height||320,dpr=window.devicePixelRatio||1;
+    cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.clearRect(0,0,W,H);
+    const pL=54,pR=24,pT=26,pB=44,cw=W-pL-pR,ch=H-pT-pB;
+    const xMin=0,xMax=24;
+    let yMin=1e9,yMax=-1e9;
+    for(let x=0;x<=24;x+=.5){const y=f(x);if(y<yMin)yMin=y;if(y>yMax)yMax=y;}
+    yMin=Math.floor(yMin/10)*10;yMax=Math.ceil(yMax/10)*10;
+    const X=v=>pL+(v-xMin)/(xMax-xMin)*cw, Y=v=>pT+ch-(v-yMin)/(yMax-yMin)*ch;
+    ctx.strokeStyle='#0f2a0f';ctx.lineWidth=1;ctx.font='11px monospace';
+    ctx.fillStyle='#3a7a3a';ctx.textAlign='right';ctx.textBaseline='middle';
+    for(let i=0;i<=5;i++){const v=yMin+(yMax-yMin)*i/5,y=Y(v);
+      ctx.beginPath();ctx.moveTo(pL,y);ctx.lineTo(pL+cw,y);ctx.stroke();
+      ctx.fillText(v.toFixed(0),pL-8,y);}
+    ctx.textAlign='center';ctx.textBaseline='top';
+    for(let v=0;v<=24;v+=4){const x=X(v);
+      ctx.beginPath();ctx.moveTo(x,pT);ctx.lineTo(x,pT+ch);ctx.stroke();
+      ctx.fillText(v+'h',x,pT+ch+8);}
+    ctx.beginPath();
+    for(let x=0;x<=24;x+=.2){const px=X(x),py=Y(f(x));
+      x===0?ctx.moveTo(px,py):ctx.lineTo(px,py);}
+    ctx.strokeStyle='#39ff14';ctx.lineWidth=3;
+    ctx.shadowColor='#39ff14';ctx.shadowBlur=12;ctx.stroke();ctx.shadowBlur=0;
+    const px=X(cur),py=Y(f(cur));
+    ctx.beginPath();ctx.arc(px,py,7,0,Math.PI*2);ctx.fillStyle='#00ffff';
+    ctx.shadowColor='#00ffff';ctx.shadowBlur=14;ctx.fill();ctx.shadowBlur=0;
+    ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();
+    ctx.fillStyle='#00ffff';ctx.font='bold 12px monospace';
+    ctx.textAlign='center';ctx.textBaseline='bottom';
+    ctx.fillText('y='+f(cur).toFixed(1),px,py-12);
+  }
+  function update(){
+    const x=+sl.value;xv.textContent=x;yv.textContent=nf.format(f(x));draw(x);
+  }
+  sl.addEventListener('input',update);
+  document.querySelectorAll('.presets button').forEach(b=>
+    b.addEventListener('click',()=>{sl.value=b.dataset.v;update();}));
+  window.addEventListener('resize',update);
+  update();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Los Recalentados · Disponibilidad del Agua · Olimpiadas STEM Bogotá</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;800&display=swap');
+*{box-sizing:border-box}
+body{margin:0;padding:30px 16px 60px;min-height:100vh;
+  font-family:'Rubik',system-ui,sans-serif;color:#ffe8f6;line-height:1.6;
+  background:linear-gradient(180deg,#1a0b2e 0%,#3d1553 40%,#7a2258 100%)}
+.app{max-width:1000px;margin:0 auto}
+.hero{text-align:center;margin-bottom:32px;padding:26px;
+  background:linear-gradient(135deg,rgba(255,110,199,.15),rgba(255,179,71,.12));
+  border:1px solid rgba(255,110,199,.35);border-radius:20px;
+  box-shadow:0 0 40px rgba(255,110,199,.2)}
+.hero h1{margin:0 0 8px;font-size:clamp(1.4rem,4vw,2rem);font-weight:800;
+  background:linear-gradient(90deg,#ff6ec7,#ffb347,#ff6ec7);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  letter-spacing:.02em}
+.hero p{margin:2px 0;color:#e0b8d8;font-size:.95rem}
+.hero .tag{display:inline-block;margin-top:12px;padding:6px 16px;border-radius:999px;
+  background:rgba(255,110,199,.2);border:1px solid #ff6ec7;color:#ffb3e0;
+  font-size:.72rem;font-weight:600;letter-spacing:.06em}
+.card{background:rgba(26,11,46,.75);border:1px solid rgba(255,110,199,.28);
+  border-radius:16px;padding:24px 26px;margin-bottom:20px;backdrop-filter:blur(10px);
+  box-shadow:0 6px 24px rgba(0,0,0,.3)}
+h2{font-size:1.05rem;margin:0 0 16px;color:#ffb3e0;font-weight:800;letter-spacing:.03em}
+.stepper{display:flex;align-items:center;gap:18px;justify-content:center;
+  flex-wrap:wrap;margin-top:6px}
+.step-btn{width:54px;height:54px;border-radius:50%;border:2px solid #ff6ec7;
+  background:rgba(255,110,199,.12);color:#ff6ec7;font-size:1.6rem;font-weight:800;
+  cursor:pointer;transition:.18s;display:flex;align-items:center;justify-content:center;line-height:1}
+.step-btn:hover{background:#ff6ec7;color:#1a0b2e;box-shadow:0 0 20px #ff6ec7}
+.step-btn:active{transform:scale(.94)}
+.step-display{font-size:3.2rem;font-weight:800;color:#fff;min-width:150px;text-align:center;
+  text-shadow:0 0 20px rgba(255,110,199,.6)}
+.step-display .u{font-size:1rem;color:#ffb347;display:block;font-weight:600;
+  letter-spacing:.15em;margin-top:4px}
+.toggle-row{display:flex;align-items:center;gap:14px;justify-content:center;
+  margin-top:22px;padding-top:20px;border-top:1px solid rgba(255,110,199,.2)}
+.switch{position:relative;width:64px;height:34px;cursor:pointer}
+.switch input{opacity:0;width:0;height:0}
+.slider-s{position:absolute;inset:0;background:rgba(255,255,255,.15);
+  border-radius:999px;transition:.3s;border:1px solid rgba(255,110,199,.4)}
+.slider-s::before{content:"";position:absolute;height:26px;width:26px;left:4px;top:3px;
+  background:#ffb347;border-radius:50%;transition:.3s;box-shadow:0 0 12px #ffb347}
+.switch input:checked + .slider-s{background:rgba(255,110,199,.4)}
+.switch input:checked + .slider-s::before{transform:translateX(30px);background:#ff6ec7;
+  box-shadow:0 0 16px #ff6ec7}
+.toggle-label{color:#e0b8d8;font-size:.92rem;font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.kpi{padding:20px;border-radius:14px;background:rgba(61,21,83,.6);
+  border:1px solid rgba(255,110,199,.3);position:relative;overflow:hidden}
+.kpi::before{content:"";position:absolute;top:0;left:0;width:5px;height:100%;
+  background:linear-gradient(180deg,#ff6ec7,#ffb347)}
+.kpi-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;
+  color:#ffb3e0;font-weight:700;margin:0 0 8px}
+.kpi-val{font-size:1.9rem;font-weight:800;margin:0;line-height:1.1;
+  background:linear-gradient(90deg,#ff6ec7,#ffb347);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.kpi-sub{font-size:.78rem;color:#c9a3bd;margin:8px 0 0;font-family:ui-monospace,monospace}
+canvas{width:100%;height:330px;display:block;border-radius:10px;
+  background:rgba(15,5,30,.65);border:1px solid rgba(255,110,199,.25)}
+.leyenda{display:flex;gap:22px;flex-wrap:wrap;font-size:.85rem;color:#c9a3bd;margin-top:14px}
+.dot{display:inline-block;width:14px;height:4px;border-radius:3px;margin-right:8px;vertical-align:3px}
+.formula{background:rgba(26,11,46,.8);border:1px dashed rgba(255,110,199,.4);
+  border-radius:12px;padding:16px 20px;font-family:ui-monospace,monospace;
+  color:#ffb3e0;font-size:.9rem;line-height:2;margin:0;overflow-x:auto}
+footer{text-align:center;font-size:.82rem;color:#a884a0;margin-top:28px}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="hero">
+    <h1>🔥 Los Recalentados</h1>
+    <p>Disponibilidad del Agua · Humedad y Nivel</p>
+    <span class="tag">OLIMPIADAS STEM BOGOTÁ · PREJUVENIL</span>
+  </header>
+
+  <section class="card">
+    <h2>⚙️ Días de funcionamiento (x)</h2>
+    <div class="stepper">
+      <button class="step-btn" id="menos" aria-label="Restar">−</button>
+      <div class="step-display">
+        <span id="dias">7</span>
+        <span class="u">DÍAS</span>
+      </div>
+      <button class="step-btn" id="mas" aria-label="Sumar">+</button>
+    </div>
+
+    <div class="toggle-row">
+      <label class="toggle-label" for="modo">Modo oscuro solar</label>
+      <label class="switch">
+        <input type="checkbox" id="modo" checked>
+        <span class="slider-s"></span>
+      </label>
+      <span class="toggle-label">Modo claro</span>
+    </div>
+  </section>
+
+  <section class="grid">
+    <div class="kpi">
+      <p class="kpi-label">Humedad relativa</p>
+      <p class="kpi-val"><span id="hVal">75.2</span>%</p>
+      <p class="kpi-sub">y = 1,4x + 65,4</p>
+    </div>
+    <div class="kpi">
+      <p class="kpi-label">Nivel de agua</p>
+      <p class="kpi-val"><span id="aVal">65.1</span>%</p>
+      <p class="kpi-sub">y = −0,8714x + 71,238</p>
+    </div>
+    <div class="kpi">
+      <p class="kpi-label">Balance</p>
+      <p class="kpi-val"><span id="bVal">+10.1</span></p>
+      <p class="kpi-sub">humedad − agua</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>📈 Curvas del modelo</h2>
+    <canvas id="cv"></canvas>
+    <div class="leyenda">
+      <span><span class="dot" style="background:#ff6ec7"></span>Humedad</span>
+      <span><span class="dot" style="background:#ffb347"></span>Nivel de agua</span>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>🧮 Modelo matemático</h2>
+    <p class="formula">
+      Humedad:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y = 1,4x + 65,4<br>
+      Nivel de agua: y = −0,8714x + 71,238
+    </p>
+  </section>
+
+  <footer>© Equipo Los Recalentados · Disponibilidad del Agua · Olimpiadas STEM Bogotá</footer>
+</div>
+
+<script>
+(function(){
+  let x=7;
+  const diasEl=document.getElementById('dias');
+  const hVal=document.getElementById('hVal'),aVal=document.getElementById('aVal'),
+        bVal=document.getElementById('bVal');
+  const cv=document.getElementById('cv');
+  const nf=new Intl.NumberFormat('es-CO',{minimumFractionDigits:1,maximumFractionDigits:1});
+  const H=t=>1.4*t+65.4, A=t=>-0.8714*t+71.238;
+
+  function draw(){
+    const ctx=cv.getContext('2d'),r=cv.getBoundingClientRect();
+    const W=r.width||600,Hh=r.height||330,dpr=window.devicePixelRatio||1;
+    cv.width=W*dpr;cv.height=Hh*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.clearRect(0,0,W,Hh);
+    const pL=52,pR=24,pT=24,pB=40,cw=W-pL-pR,ch=Hh-pT-pB;
+    let yMin=1e9,yMax=-1e9;
+    for(let t=0;t<=15;t+=.5){
+      [H(t),A(t)].forEach(v=>{if(v<yMin)yMin=v;if(v>yMax)yMax=v;});}
+    yMin=Math.floor(yMin/5)*5;yMax=Math.ceil(yMax/5)*5;
+    const X=v=>pL+v/15*cw, Y=v=>pT+ch-(v-yMin)/(yMax-yMin)*ch;
+    ctx.font='11px Rubik,sans-serif';ctx.fillStyle='#a884a0';
+    ctx.strokeStyle='rgba(255,110,199,.12)';ctx.lineWidth=1;
+    ctx.textAlign='right';ctx.textBaseline='middle';
+    for(let i=0;i<=5;i++){const v=yMin+(yMax-yMin)*i/5,y=Y(v);
+      ctx.beginPath();ctx.moveTo(pL,y);ctx.lineTo(pL+cw,y);ctx.stroke();
+      ctx.fillText(v.toFixed(0),pL-8,y);}
+    ctx.textAlign='center';ctx.textBaseline='top';
+    for(let v=0;v<=15;v+=3){const px=X(v);ctx.fillText(v+'d',px,pT+ch+8);}
+    [[H,'#ff6ec7'],[A,'#ffb347']].forEach(([fn,c])=>{
+      ctx.beginPath();
+      for(let t=0;t<=15;t+=.15){const px=X(t),py=Y(fn(t));
+        t===0?ctx.moveTo(px,py):ctx.lineTo(px,py);}
+      ctx.strokeStyle=c;ctx.lineWidth=3.5;ctx.shadowColor=c;ctx.shadowBlur=10;
+      ctx.stroke();ctx.shadowBlur=0;
+    });
+    [[H,'#ff6ec7'],[A,'#ffb347']].forEach(([fn,c])=>{
+      const px=X(x),py=Y(fn(x));
+      ctx.beginPath();ctx.arc(px,py,8,0,Math.PI*2);ctx.fillStyle=c;
+      ctx.strokeStyle='#1a0b2e';ctx.lineWidth=3;ctx.fill();ctx.stroke();
+    });
+  }
+  function update(){
+    diasEl.textContent=x;
+    const h=H(x),a=A(x);
+    hVal.textContent=nf.format(h);
+    aVal.textContent=nf.format(a);
+    bVal.textContent=(h-a>=0?'+':'')+nf.format(h-a);
+    draw();
+  }
+  document.getElementById('mas').addEventListener('click',()=>{if(x<15)x++;update();});
+  document.getElementById('menos').addEventListener('click',()=>{if(x>0)x--;update();});
+  document.getElementById('modo').addEventListener('change',function(){
+    document.body.style.filter=this.checked?'':'invert(1) hue-rotate(180deg)';
+  });
+  window.addEventListener('resize',update);
+  update();
+})();
+</script>
+</body>
+</html>

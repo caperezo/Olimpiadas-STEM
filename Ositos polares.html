@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ositos polares · Cambio Climático · Olimpiadas STEM Bogotá</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap');
+*{box-sizing:border-box}
+body{margin:0;padding:30px 16px 60px;min-height:100vh;
+  font-family:'Fredoka',system-ui,sans-serif;color:#16425b;line-height:1.6;
+  background:#e8f4f8;background-image:radial-gradient(circle at 15% 10%,#d4ebf5 0,transparent 45%),
+                   radial-gradient(circle at 90% 85%,#c9e5ef 0,transparent 50%)}
+.app{max-width:1000px;margin:0 auto}
+.hero{text-align:center;margin-bottom:32px;padding:26px;
+  background:linear-gradient(180deg,#fff 0%,#f5fbfe 100%);
+  border:2px solid #b8dce8;border-radius:26px;
+  box-shadow:0 10px 30px rgba(58,124,165,.12)}
+.hero .bear{font-size:3rem;line-height:1;margin-bottom:6px}
+.hero h1{margin:0 0 8px;font-size:clamp(1.5rem,4vw,2.1rem);font-weight:700;color:#3a7ca5}
+.hero p{margin:2px 0;color:#5e8ba6;font-size:.95rem}
+.hero .tag{display:inline-block;margin-top:12px;padding:8px 20px;border-radius:999px;
+  background:#3a7ca5;color:#fff;font-size:.75rem;font-weight:600;letter-spacing:.06em}
+.card{background:#fff;border:2px solid #d4ebf5;border-radius:24px;padding:24px 26px;
+  margin-bottom:20px;box-shadow:0 6px 22px rgba(58,124,165,.08)}
+h2{font-size:1.1rem;margin:0 0 16px;color:#3a7ca5;font-weight:700;
+  display:flex;align-items:center;gap:8px}
+.switch-row{display:flex;align-items:center;justify-content:space-between;
+  gap:20px;flex-wrap:wrap;padding:6px 0}
+.switch-info strong{display:block;font-size:1rem;color:#16425b;font-weight:600}
+.switch-info span{font-size:.85rem;color:#7fa8bd}
+.switch{position:relative;width:72px;height:38px;cursor:pointer;flex-shrink:0}
+.switch input{opacity:0;width:0;height:0}
+.slider-s{position:absolute;inset:0;background:#d4ebf5;border-radius:999px;
+  transition:.28s;border:2px solid #b8dce8}
+.slider-s::before{content:"";position:absolute;height:28px;width:28px;left:4px;top:3px;
+  background:#fff;border-radius:50%;transition:.28s;
+  box-shadow:0 2px 8px rgba(58,124,165,.25);border:2px solid #3a7ca5}
+.switch input:checked + .slider-s{background:#3a7ca5;border-color:#3a7ca5}
+.switch input:checked + .slider-s::before{transform:translateX(34px);background:#fff}
+label.lbl{display:block;font-weight:600;color:#3a7ca5;margin:18px 0 10px;font-size:.9rem}
+.slider-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+input[type=range]{-webkit-appearance:none;appearance:none;flex:1 1 260px;height:32px;
+  background:transparent;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:12px;
+  background:linear-gradient(90deg,#b8dce8,#3a7ca5);border-radius:999px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;
+  border-radius:50%;background:#fff;border:4px solid #16425b;margin-top:-9px;
+  box-shadow:0 4px 12px rgba(22,66,91,.3)}
+input[type=range]::-moz-range-track{height:12px;background:linear-gradient(90deg,#b8dce8,#3a7ca5);
+  border-radius:999px}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#fff;
+  border:4px solid #16425b}
+output{font-weight:700;font-size:1.15rem;color:#16425b;background:#e8f4f8;
+  border:2px solid #b8dce8;padding:8px 18px;border-radius:999px;min-width:110px;text-align:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}
+.kpi{padding:20px;border-radius:20px;background:#f5fbfe;border:2px solid #d4ebf5}
+.kpi-label{font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;
+  color:#5e8ba6;font-weight:600;margin:0 0 8px}
+.kpi-val{font-size:1.85rem;font-weight:700;color:#16425b;margin:0;line-height:1.1}
+.kpi-sub{font-size:.8rem;color:#7fa8bd;margin:8px 0 0;font-family:ui-monospace,monospace}
+canvas{width:100%;height:330px;display:block;background:#f5fbfe;
+  border:2px solid #d4ebf5;border-radius:16px}
+.leyenda{display:flex;gap:22px;flex-wrap:wrap;font-size:.88rem;color:#5e8ba6;margin-top:14px}
+.dot{display:inline-block;width:14px;height:4px;border-radius:3px;margin-right:8px;vertical-align:3px}
+.formula{background:#f5fbfe;border:2px dashed #b8dce8;border-radius:16px;
+  padding:16px 20px;font-family:ui-monospace,monospace;color:#16425b;
+  font-size:.9rem;line-height:2;margin:0;overflow-x:auto}
+footer{text-align:center;font-size:.85rem;color:#7fa8bd;margin-top:28px}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="hero">
+    <div class="bear">🐻‍❄️</div>
+    <h1>Ositos Polares</h1>
+    <p>Cambio Climático · Luz y Humedad</p>
+    <span class="tag">OLIMPIADAS STEM BOGOTÁ · PREJUVENIL</span>
+  </header>
+
+  <section class="card">
+    <h2>🔆 Panel de control</h2>
+    <div class="switch-row">
+      <div class="switch-info">
+        <strong>Modo "Luz Colombia"</strong>
+        <span>Activa la curva de luz tropical</span>
+      </div>
+      <label class="switch" for="modo">
+        <input type="checkbox" id="modo">
+        <span class="slider-s"></span>
+      </label>
+    </div>
+
+    <label class="lbl" for="x">Exposición solar / tiempo (x)</label>
+    <div class="slider-row">
+      <input type="range" id="x" min="0" max="24" step="0.5" value="12">
+      <output id="xOut">12,0</output>
+    </div>
+  </section>
+
+  <section class="grid">
+    <div class="kpi">
+      <p class="kpi-label">Luz polar</p>
+      <p class="kpi-val"><span id="luzP">93.3</span></p>
+      <p class="kpi-sub">y = −0,0143x + 93,514</p>
+    </div>
+    <div class="kpi">
+      <p class="kpi-label">Luz Colombia</p>
+      <p class="kpi-val"><span id="luzC">81.2</span></p>
+      <p class="kpi-sub">y = 3,1107x + 43,848</p>
+    </div>
+    <div class="kpi">
+      <p class="kpi-label">Humedad polar</p>
+      <p class="kpi-val"><span id="hum">67.1</span></p>
+      <p class="kpi-sub">y = −1,4x + 83,867</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>📉 Curvas del modelo</h2>
+    <canvas id="cv"></canvas>
+    <div class="leyenda">
+      <span><span class="dot" style="background:#3a7ca5"></span>Luz (polar)</span>
+      <span><span class="dot" style="background:#f2b705"></span>Luz (Colombia)</span>
+      <span><span class="dot" style="background:#7fb3d5"></span>Humedad</span>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>🧊 Modelo matemático</h2>
+    <p class="formula">
+      Luz polar:&nbsp;&nbsp;&nbsp;&nbsp;y = −0,0143x + 93,514<br>
+      Luz Colombia: y = 3,1107x + 43,848<br>
+      Humedad:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y = −1,4x + 83,867
+    </p>
+  </section>
+
+  <footer>© Equipo Ositos Polares · Cambio Climático · Olimpiadas STEM Bogotá</footer>
+</div>
+
+<script>
+(function(){
+  const sl=document.getElementById('x'),xOut=document.getElementById('xOut');
+  const luzP=document.getElementById('luzP'),luzC=document.getElementById('luzC'),
+        hum=document.getElementById('hum');
+  const cv=document.getElementById('cv');
+  const nf=new Intl.NumberFormat('es-CO',{minimumFractionDigits:1,maximumFractionDigits:1});
+  const LP=x=>-0.0143*x+93.514, LC=x=>3.1107*x+43.848, HU=x=>-1.4*x+83.867;
+
+  function draw(cur,modo){
+    const ctx=cv.getContext('2d'),r=cv.getBoundingClientRect();
+    const W=r.width||600,Hh=r.height||330,dpr=window.devicePixelRatio||1;
+    cv.width=W*dpr;cv.height=Hh*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.clearRect(0,0,W,Hh);
+    const pL=52,pR=24,pT=24,pB=40,cw=W-pL-pR,ch=Hh-pT-pB;
+    let yMin=1e9,yMax=-1e9;
+    for(let x=0;x<=24;x+=.5){
+      [LP(x),LC(x),HU(x)].forEach(v=>{if(v<yMin)yMin=v;if(v>yMax)yMax=v;});}
+    yMin=Math.floor(yMin/10)*10;yMax=Math.ceil(yMax/10)*10;
+    const X=v=>pL+v/24*cw, Y=v=>pT+ch-(v-yMin)/(yMax-yMin)*ch;
+    ctx.font='11px Fredoka,sans-serif';ctx.fillStyle='#7fa8bd';
+    ctx.strokeStyle='#e0eef5';ctx.lineWidth=1;
+    ctx.textAlign='right';ctx.textBaseline='middle';
+    for(let i=0;i<=5;i++){const v=yMin+(yMax-yMin)*i/5,y=Y(v);
+      ctx.beginPath();ctx.moveTo(pL,y);ctx.lineTo(pL+cw,y);ctx.stroke();
+      ctx.fillText(v.toFixed(0),pL-8,y);}
+    ctx.textAlign='center';ctx.textBaseline='top';
+    for(let v=0;v<=24;v+=4){const px=X(v);ctx.fillText(v+'h',px,pT+ch+8);}
+    const series=[[LP,'#3a7ca5'], [LC,'#f2b705'], [HU,'#7fb3d5']];
+    series.forEach(([fn,c])=>{
+      ctx.beginPath();
+      for(let x=0;x<=24;x+=.2){const px=X(x),py=Y(fn(x));
+        x===0?ctx.moveTo(px,py):ctx.lineTo(px,py);}
+      ctx.strokeStyle=c;ctx.lineWidth=3;ctx.lineJoin='round';ctx.stroke();
+    });
+    const activa = modo ? LC : LP;
+    const colorA = modo ? '#f2b705' : '#3a7ca5';
+    const px=X(cur),py=Y(activa(cur));
+    ctx.beginPath();ctx.arc(px,py,8,0,Math.PI*2);ctx.fillStyle=colorA;
+    ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.fill();ctx.stroke();
+  }
+  function update(){
+    const x=+sl.value, modo=document.getElementById('modo').checked;
+    xOut.textContent=nf.format(x);
+    luzP.textContent=nf.format(LP(x));
+    luzC.textContent=nf.format(LC(x));
+    hum.textContent=nf.format(HU(x));
+    draw(x,modo);
+  }
+  sl.addEventListener('input',update);
+  document.getElementById('modo').addEventListener('change',update);
+  window.addEventListener('resize',update);
+  update();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Limpieza del cielo · Prototipo de Riego · Olimpiadas STEM Bogotá</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Inter:wght@400;600&display=swap');
+*{box-sizing:border-box}
+body{margin:0;padding:34px 18px 60px;min-height:100vh;
+  font-family:'Inter',system-ui,sans-serif;color:#3d3a33;line-height:1.6;
+  background:#f4ede4;background-image:radial-gradient(circle at 100% 0,#e8e0d2,transparent 55%),
+                   radial-gradient(circle at 0 100%,#e0e8e6,transparent 55%)}
+.app{max-width:1000px;margin:0 auto}
+.hero{text-align:center;margin-bottom:34px;padding-bottom:22px;
+  border-bottom:1px solid #d8cfc0}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,4.5vw,2.6rem);
+  margin:0 0 6px;font-weight:700;color:#4a6fa5;letter-spacing:.01em}
+.hero .subt{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:#7a6f5c;
+  font-style:italic;margin:0}
+.hero .tag{display:inline-block;margin-top:14px;padding:6px 18px;border-radius:999px;
+  background:#4a6fa5;color:#f4ede4;font-size:.72rem;letter-spacing:.14em;font-weight:600}
+.card{background:#fbf7f0;border:1px solid #e0d6c5;border-radius:6px;padding:26px 28px;
+  margin-bottom:22px;box-shadow:0 3px 14px rgba(74,111,165,.06)}
+h2{font-family:'Cormorant Garamond',serif;font-size:1.3rem;margin:0 0 18px;
+  color:#4a6fa5;font-weight:700}
+label{display:block;font-weight:600;color:#4a6fa5;margin-bottom:10px;font-size:.88rem;
+  letter-spacing:.04em;text-transform:uppercase}
+.slider-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+input[type=range]{-webkit-appearance:none;appearance:none;flex:1 1 280px;height:30px;
+  background:transparent;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:6px;background:#e0d6c5;border-radius:999px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;
+  border-radius:50%;background:#fbf7f0;border:3px solid #4a6fa5;margin-top:-10px;
+  box-shadow:0 2px 6px rgba(74,111,165,.25)}
+input[type=range]::-moz-range-track{height:6px;background:#e0d6c5;border-radius:999px}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;
+  background:#fbf7f0;border:3px solid #4a6fa5}
+output{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.4rem;
+  color:#4a6fa5;background:#f4ede4;border:1px solid #d8cfc0;padding:6px 18px;
+  border-radius:4px;min-width:100px;text-align:center}
+.gauges{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:22px;
+  margin-bottom:22px}
+.gauge-card{background:#fbf7f0;border:1px solid #e0d6c5;border-radius:6px;
+  padding:24px 18px;text-align:center}
+.gauge-card h3{font-family:'Cormorant Garamond',serif;font-size:1.05rem;margin:0 0 4px;
+  color:#7a6f5c;font-weight:500;letter-spacing:.02em}
+.gauge-wrap{position:relative;width:170px;height:170px;margin:14px auto 6px}
+.gauge-wrap svg{width:100%;height:100%;transform:rotate(-90deg)}
+.gauge-track{fill:none;stroke:#e8e0d2;stroke-width:9}
+.gauge-fill{fill:none;stroke-width:9;stroke-linecap:round;transition:stroke-dashoffset .3s}
+.gauge-val{position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif}
+.gauge-val .num{font-size:2rem;font-weight:700;color:#4a6fa5;line-height:1}
+.gauge-val .u{font-size:.85rem;color:#7a6f5c;margin-top:4px;letter-spacing:.08em}
+.gauge-card p.note{font-size:.8rem;color:#9a8f7a;margin:8px 0 0;font-family:ui-monospace,monospace}
+canvas{width:100%;height:300px;display:block}
+.leyenda{display:flex;gap:22px;flex-wrap:wrap;font-size:.85rem;color:#7a6f5c;margin-top:16px;
+  font-family:'Cormorant Garamond',serif;font-size:1rem}
+.dot{display:inline-block;width:14px;height:3px;margin-right:8px;vertical-align:3px}
+.formula{background:#f4ede4;border:1px solid #e0d6c5;border-radius:4px;
+  padding:18px 22px;font-family:ui-monospace,monospace;color:#4a6fa5;
+  font-size:.9rem;line-height:2;margin:0;overflow-x:auto}
+footer{text-align:center;font-size:.8rem;color:#a89a85;margin-top:28px;
+  font-family:'Cormorant Garamond',serif;font-size:.95rem;font-style:italic}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="hero">
+    <h1>Limpieza del Cielo</h1>
+    <p class="subt">Prototipo de Riego · Disponibilidad del Agua</p>
+    <span class="tag">OLIMPIADAS STEM BOGOTÁ · PREJUVENIL</span>
+  </header>
+
+  <section class="card">
+    <h2>⏳ Tiempo de funcionamiento</h2>
+    <label>Días de operación (x)</label>
+    <div class="slider-row">
+      <input type="range" id="x" min="0" max="15" step="0.5" value="7">
+      <output id="xOut">7,0 días</output>
+    </div>
+  </section>
+
+  <section class="gauges">
+    <div class="gauge-card">
+      <h3>Humedad relativa</h3>
+      <div class="gauge-wrap">
+        <svg viewBox="0 0 170 170">
+          <circle class="gauge-track" cx="85" cy="85" r="72"/>
+          <circle class="gauge-fill" id="gH" cx="85" cy="85" r="72"
+            stroke="#4a6fa5" stroke-dasharray="452" stroke-dashoffset="452"/>
+        </svg>
+        <div class="gauge-val">
+          <span class="num" id="hVal">75.7</span>
+          <span class="u">% HUMEDAD</span>
+        </div>
+      </div>
+      <p class="note">y = 1,0929x + 68,057</p>
+    </div>
+
+    <div class="gauge-card">
+      <h3>Nivel de agua</h3>
+      <div class="gauge-wrap">
+        <svg viewBox="0 0 170 170">
+          <circle class="gauge-track" cx="85" cy="85" r="72"/>
+          <circle class="gauge-fill" id="gA" cx="85" cy="85" r="72"
+            stroke="#7ba3b8" stroke-dasharray="452" stroke-dashoffset="452"/>
+        </svg>
+        <div class="gauge-val">
+          <span class="num" id="aVal">63.5</span>
+          <span class="u">% AGUA</span>
+        </div>
+      </div>
+      <p class="note">y = -0,8571x + 69,457</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>🌊 Curvas del modelo</h2>
+    <canvas id="cv"></canvas>
+    <div class="leyenda">
+      <span><span class="dot" style="background:#4a6fa5"></span>Humedad</span>
+      <span><span class="dot" style="background:#7ba3b8"></span>Nivel de agua</span>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>📐 Modelo matemático</h2>
+    <p class="formula">
+      Humedad:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y = 1,0929x + 68,057<br>
+      Nivel de agua: y = −0,8571x + 69,457
+    </p>
+  </section>
+
+  <footer>© Equipo Limpieza del Cielo · Prototipo de Riego · Olimpiadas STEM Bogotá</footer>
+</div>
+
+<script>
+(function(){
+  const CIRC=2*Math.PI*72;
+  const sl=document.getElementById('x'),xOut=document.getElementById('xOut');
+  const hVal=document.getElementById('hVal'),aVal=document.getElementById('aVal');
+  const gH=document.getElementById('gH'),gA=document.getElementById('gA');
+  const cv=document.getElementById('cv');
+  const nf=new Intl.NumberFormat('es-CO',{minimumFractionDigits:1,maximumFractionDigits:1});
+  const H=x=>1.0929*x+68.057, A=x=>-0.8571*x+69.457;
+
+  function gauge(el,val){
+    const pct=Math.max(0,Math.min(100,val))/100;
+    el.style.strokeDashoffset=CIRC*(1-pct);
+  }
+  function draw(cur){
+    const ctx=cv.getContext('2d'),r=cv.getBoundingClientRect();
+    const W=r.width||600,Hh=r.height||300,dpr=window.devicePixelRatio||1;
+    cv.width=W*dpr;cv.height=Hh*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.clearRect(0,0,W,Hh);
+    const pL=52,pR=24,pT=24,pB=40,cw=W-pL-pR,ch=Hh-pT-pB;
+    let yMin=1e9,yMax=-1e9;
+    for(let x=0;x<=15;x+=.5){
+      [H(x),A(x)].forEach(y=>{if(y<yMin)yMin=y;if(y>yMax)yMax=y;});
+    }
+    yMin=Math.floor(yMin/10)*10;yMax=Math.ceil(yMax/10)*10;
+    const X=v=>pL+v/15*cw, Y=v=>pT+ch-(v-yMin)/(yMax-yMin)*ch;
+    ctx.font='11px Inter,sans-serif';ctx.fillStyle='#9a8f7a';
+    ctx.strokeStyle='#ede4d4';ctx.lineWidth=1;
+    ctx.textAlign='right';ctx.textBaseline='middle';
+    for(let i=0;i<=5;i++){const v=yMin+(yMax-yMin)*i/5,y=Y(v);
+      ctx.beginPath();ctx.moveTo(pL,y);ctx.lineTo(pL+cw,y);ctx.stroke();
+      ctx.fillText(v.toFixed(0),pL-8,y);}
+    ctx.textAlign='center';ctx.textBaseline='top';
+    for(let v=0;v<=15;v+=3){const x=X(v);ctx.fillText(v+'d',x,pT+ch+8);}
+    [[H,'#4a6fa5'],[A,'#7ba3b8']].forEach(([fn,c])=>{
+      ctx.beginPath();
+      for(let x=0;x<=15;x+=.15){const px=X(x),py=Y(fn(x));
+        x===0?ctx.moveTo(px,py):ctx.lineTo(px,py);}
+      ctx.strokeStyle=c;ctx.lineWidth=3;ctx.lineJoin='round';ctx.stroke();
+    });
+    [[H,'#4a6fa5',-14],[A,'#7ba3b8',14]].forEach(([fn,c,off])=>{
+      const px=X(cur),py=Y(fn(cur));
+      ctx.beginPath();ctx.arc(px,py,7,0,Math.PI*2);ctx.fillStyle=c;
+      ctx.strokeStyle='#fbf7f0';ctx.lineWidth=3;ctx.fill();ctx.stroke();
+    });
+  }
+  function update(){
+    const x=+sl.value;xOut.textContent=nf.format(x)+' días';
+    hVal.textContent=nf.format(H(x));
+    aVal.textContent=nf.format(A(x));
+    gauge(gH,H(x));gauge(gA,A(x));
+    draw(x);
+  }
+  sl.addEventListener('input',update);
+  window.addEventListener('resize',update);
+  update();
+})();
+</script>
+</body>
+</html>
