@@ -1,0 +1,85 @@
+<!-- ============================= -->
+<!-- index.html -->
+<!-- ============================= -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capa de Ozuna · Aumento de Temperatura · Olimpiadas STEM Bogotá</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <header class="hero">
+    <h1>⚡ CAPA DE OZUNA ⚡</h1>
+    <p>Aumento de Temperatura · Humedad · Luz</p>
+    <span class="tag">OLIMPIADAS STEM BOGOTÁ · PREJUVENIL</span>
+  </header>
+
+  <section class="card">
+    <h2>▸ Variable de entrada</h2>
+    <div class="pills" role="radiogroup" aria-label="Modo de análisis">
+      <label><input type="radio" name="m" value="temp" checked><span>TEMPERATURA</span></label>
+      <label><input type="radio" name="m" value="hum"><span>HUMEDAD</span></label>
+      <label><input type="radio" name="m" value="luz"><span>LUZ</span></label>
+    </div>
+    <div class="slider-row">
+      <input type="range" id="x" min="0" max="60" step="1" value="30">
+      <output id="xOut">X = 30</output>
+    </div>
+  </section>
+
+  <section class="grid">
+    <div class="kpi">
+      <p class="kpi-label">Temperatura</p>
+      <p class="kpi-val"><span id="tVal">23.2</span>°C</p>
+      <p class="kpi-sub">y = 0,0172x + 22,728</p>
+    </div>
+    <div class="kpi pink">
+      <p class="kpi-label">Humedad</p>
+      <p class="kpi-val"><span id="hVal">66.3</span>%</p>
+      <p class="kpi-sub">y = 0,5784x + 48,971</p>
+    </div>
+    <div class="kpi">
+      <p class="kpi-label">Luz</p>
+      <p class="kpi-val"><span id="lVal">88.4</span></p>
+      <p class="kpi-sub">y = −0,299x + 97,397</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>▸ Curvas del sistema</h2>
+    <canvas id="cv"></canvas>
+    <div class="leyenda">
+      <span><span class="dot" style="background:#ff006e"></span>Temperatura</span>
+      <span><span class="dot" style="background:#00f5d4"></span>Humedad</span>
+      <span><span class="dot" style="background:#a09cc0"></span>Luz</span>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>▸ Modelo matemático</h2>
+    <details open>
+      <summary>Ecuación de Temperatura</summary>
+      <p>y = 0,0172x + 22,728</p>
+    </details>
+    <details>
+      <summary>Ecuación de Humedad</summary>
+      <p>y = 0,5784x + 48,971</p>
+    </details>
+    <details>
+      <summary>Ecuación de Luz</summary>
+      <p>y = −0,299x + 97,397</p>
+    </details>
+  </section>
+
+  <footer>© CAPA DE OZUNA · AUMENTO DE TEMPERATURA · OLIMPIADAS STEM BOGOTÁ</footer>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
